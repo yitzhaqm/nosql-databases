@@ -6,7 +6,7 @@ var VOTE_SCORE = 432;
 
 function article_vote(client, user, article) {
     var cutoff = Date.now() - ONE_WEEK_IN_MILLISECONDS;
-    var article_time = 1000 * client.zscore("time:", article);
+    var article_time = 1000 * client.zscore("time:", article, (val)=>{console.log(val)})
 
     if (! article_time < cutoff) {
         var article_id = article.split(':')[1];
@@ -28,10 +28,12 @@ article_vote(client, "user:3", "article:1")
 article_vote(client, "user:3", "article:3")
 // user:2 switches their vote from article:8 to article:1
 article_switch_vote(client, "user:2", "article:8", "article:1")
-client.quit();
+//client.quit();
 
 // Which article's score is between 10 and 20?
 // PRINT THE ARTICLE'S LINK TO STDOUT:
 // HOMEWORK 2 Part II
-// var article = client.?
-// print client.?
+var article = client.zrangebyscore('score:', 0,20)
+console.log(client.zscore("time:", "article:8"))
+//console.log(client.hgetall(article))
+client.quit()
