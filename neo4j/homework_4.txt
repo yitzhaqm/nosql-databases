@@ -1,7 +1,121 @@
 // The scenario you have used for your schema is:
+	GAME OF THRONES
+	Marriages and Family surrounding the house of Stark
 
-
-// This is an example. Your own commands should *not* be commented out so we can pipe the file into the cypher-shell.
 // If you'd like to test your commands, you can run 'cat homework_4.txt | cypher-shell -u neo4j -p test' from
-// the vagrant box command line. Make sure neo4j is running first.
-// CREATE (a:person { name: 't' });
+
+// Note that not every marriage/familial relationship has been reported on my graph
+
+// 10 nodes --8 characters and 2 Houses from Game of Thrones
+// 12 relationships as provided in my sketch
+// relatioships have been named slightly differently
+// Drawn as is_married_to - implemented as MARRIED
+// Drawn as is_father_to - implemented as FATHERED
+// Drawn as is_mother_to -  implemented as MOTHERED
+// Drawn as belongs_to - implemented as BELONGS_TO
+
+CREATE (a:Person {name:"Catelyn"});
+CREATE (a:Person {name:"Catelyn"});
+CREATE (a:Person {name:"Brandon"});
+CREATE (a:Person {name:"John"});
+CREATE (a:Person {name:"Rickard"});
+CREATE (a:Person {name:"Rickon"});
+CREATE (a:Person {name:"Lyanna"});
+CREATE (a:Person {name:"Rhaegar"});
+CREATE (a:House {name:"Stark"});
+CREATE (a:House {name:"Targaryen"});
+
+
+// I have implemented operators properly
+// to shortent he number of queries as advised in class
+// Nonetheless, I have 12 relationships below when singled out. 
+// I hope this is okay
+
+
+MATCH (a:Person), (b:House)
+WHERE a.name <> "John" AND a.name <> "Catelyn" AND a.name <> "Rhaegar" AND b.name = "Stark"
+CREATE (a)-[r:BELONGS_TO {name:a.name+" belongs to "+ b.name, born_into_house:"yes"}]->(b);
+
+
+MATCH (a:Person), (b:House)
+WHERE a.name="John" AND b.name="Targaryen"
+CREATE (a)-[r:BELONGS_TO {name:a.name+" belongs to "+b.name, born_into_house:"yes"}]->(b);
+
+
+MATCH (a:Person), (b:Person)
+WHERE a.name="Rhaegar" AND b.name="John"
+CREATE (a)-[r:FATHERED]->(b);
+
+
+MATCH (a:Person), (b:Person)
+WHERE a.name="Rickard" AND b.name="Lyanna"
+CREATE (a)-[r:FATHERED]->(b);
+
+       
+MATCH (a:Person), (b:Person)
+WHERE a.name="Lyanna" AND b.name="Rhaegar"
+CREATE (a)-[r:MARRIED {number_of_children:1}]->(b);
+
+
+MATCH (a:Person), (b:Person)
+WHERE a.name="Catelyn" AND b.name="Brandon"
+CREATE (a)-[r:MARRIED {number_of_children:0}]->(b);
+
+
+MATCH (a:Person), (b:Person)
+WHERE a.name="Catelyn" AND (b.name="Arya" OR b.name="Rickon")
+CREATE (a)-[r:MOTHERED]->(b);
+
+
+// The following commands will out put all available relationships between people
+
+MATCH (a:Person)-[r]->(b:Person)
+RETURN a.name, type(r), b.name;
+
+// Result should be:
+
+// +------------------------------------+
+// | a.name    | type(r)    | b.name    |
+// +------------------------------------+
+// | "Catelyn" | "MOTHERED" | "Arya"    |
+// | "Catelyn" | "MARRIED"  | "Brandon" |
+// | "Rhaegar" | "FATHERED" | "John"    |
+// | "Catelyn" | "MOTHERED" | "Rickon"  |
+// | "Rickard" | "FATHERED" | "Lyanna"  |
+// | "Lyanna"  | "MARRIED"  | "Rhaegar" |
+// +------------------------------------+
+
+
+// Another subgraph:
+
+MATCH (a:Person)-[r:BELONGS_TO]->(b:House)
+RETURN a.name, type(r), b.name;
+
+// Result should be:
+
+// +----------------------------------------+
+// | a.name    | type(r)      | b.name      |
+// +----------------------------------------+
+// | "John"    | "BELONGS_TO" | "Targaryen" |
+// | "Lyanna"  | "BELONGS_TO" | "Stark"     |
+// | "Rickon"  | "BELONGS_TO" | "Stark"     |
+// | "Rickard" | "BELONGS_TO" | "Stark"     |
+// | "Brandon" | "BELONGS_TO" | "Stark"     |
+// | "Arya"    | "BELONGS_TO" | "Stark"     |
+// +----------------------------------------+
+
+//The End
+
+
+
+
+
+
+
+
+
+
+
+
+
+
