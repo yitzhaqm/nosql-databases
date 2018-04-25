@@ -1,6 +1,7 @@
+// Yishak Tofik Mohammed
 // The scenario you have used for your schema is:
-	GAME OF THRONES
-	Marriages and Family surrounding the house of Stark
+//	GAME OF THRONES
+//	Marriages and Family surrounding the house of Stark
 
 // If you'd like to test your commands, you can run 'cat homework_4.txt | cypher-shell -u neo4j -p test' from
 
@@ -72,7 +73,7 @@ CREATE (a)-[r:MOTHERED]->(b);
 MATCH (a:Person)-[r]->(b:Person)
 RETURN a.name, type(r), b.name;
 
-// Result should be:
+// Result should be (without the decoration):
 
 // +------------------------------------+
 // | a.name    | type(r)    | b.name    |
@@ -91,7 +92,7 @@ RETURN a.name, type(r), b.name;
 MATCH (a:Person)-[r:BELONGS_TO]->(b:House)
 RETURN a.name, type(r), b.name;
 
-// Result should be:
+// Result should be (without the decoration):
 
 // +----------------------------------------+
 // | a.name    | type(r)      | b.name      |
