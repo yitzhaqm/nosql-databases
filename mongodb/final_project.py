@@ -27,7 +27,7 @@ db = mongo["bike-app"]
 
 
 # !!!IMPORTANT!!!
-# Note: The following series of actions assume that mongod is running andcreate_objects.py has been run as well.
+# (Python 2.7) Note: The following series of actions assume that mongod is running andcreate_objects.py has been run as well.
 # !!!IMPORTANT!!!
 
 
@@ -109,6 +109,7 @@ print("\nYour destination station is station "+str(destination_station["_id"])+"
 
 users.update({"_id":{"$eq":uid}},
 		     {"$push":{"bikes":bike}})
+users.update({"_id":uid}, {"$push":{"stations":destination_station["_id"]}})
 shares = db["shares"]
 s = shares.count()
 shares.insert_one({
@@ -143,7 +144,7 @@ print("\nJourney officially started! Have a safe trip!")
 # we use already recorded one for now
 street = 3 #received from request
 streets = db["streets"]
-str = streets.find({"_id":{"$eq":street}})[0]
+strd = streets.find({"_id":{"$eq":street}})[0]
 
 # queries could be merged into one
 journeys.update(
@@ -157,20 +158,20 @@ journeys.update(
 #	{"$inc":{"distance":str["length"]}}
 #})
 
-print("Your are currently on "+str["street_name"].encode("ascii", "ignore")+".") # send street info to user
+print("Your are currently on "+strd["street_name"].encode("ascii", "ignore")+".") # send street info to user
 
 
 # Action 6: Upon reaching destination station area, signal backend to check for available spots to put the bike
 st = stations.find({"_id":{"$eq":destination_station["_id"]}})
 slots = db["slots"]
-free=None  
+free=-1  
 for sl in st[0]["slots"]:
 	sll = slots.find({"_id":{"$eq":sl}})[0]
 	if(sll["status"]=="free"):
 		print("Slot "+str(sl)+" is free.")
 		free=sl
 		break
-if(free!=None):
+if(not free is None):
 	print("\nPut your bike on slot "+str(free)+".") #send to user
 
 # Action 7: put bike at the available slot

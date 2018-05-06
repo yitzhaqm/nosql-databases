@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import pprint
 
 mongo = MongoClient()
-
+mongo.drop_database("bike-app")
 db = mongo["bike-app"]
 
 userc = db["users"]
@@ -24,8 +24,8 @@ stats = {
             "stations":4,
             "slots":7,
             "journeys":4,
-            "streets":9
-        }
+            "streets":9        
+	}
 statc.insert_one(stats)
 
 users = [
