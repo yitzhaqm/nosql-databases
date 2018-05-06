@@ -1,3 +1,4 @@
+# Dummy Data Dumper 
 from pymongo import MongoClient
 import pprint
 
@@ -267,6 +268,6 @@ streetc.insert_many(streets)
 
 
 
-#running this script should dump the above data and collections into a database called "bike-app"
+# running this script should dump the above data and collections into a database called "bike-app"
 
 
