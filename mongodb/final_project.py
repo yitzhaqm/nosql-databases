@@ -50,7 +50,7 @@ users.insert_one({
 })
 stats = db["stats"]
 stats.update_one(
-	{},
+        {"_id":0},
 	{
 		"$inc":{"users":1}
 	}
@@ -176,7 +176,7 @@ if(free!=None):
 # Action 7: put bike at the available slot
 print("\nRegistering your bike return...")
 slots.update_one({"_id":free},{"$set":{"status":"taken"}})
-stats.update_one({},{"$inc":{"journeys":1}})
+stats.update_one({"_id":0},{"$inc":{"journeys":1}})
 
 
 # Action 8: pay and complete journey

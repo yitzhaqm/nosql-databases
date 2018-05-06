@@ -16,6 +16,17 @@ journeyc = db["journeys"] # this could be embedded, but is referenced for
 			  # the sake of stats
 streetc = db["streets"]
 
+stats = {
+            "_id":0,
+            "users":3,
+            "bikes":5,
+            "shares":4,
+            "stations":4,
+            "slots":7,
+            "journeys":4,
+            "streets":9
+        }
+statc.insert_one(stats)
 
 users = [
 {
